@@ -4,7 +4,11 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create(set_user)
+    if params[:user][:password] != params[:user][:password_confirmation]
+      flash[:alert] = "Please confirm the password"
+      return redirect_to controller: 'users', action: 'new'
+    end
+    @user = User.create(user_params)
 
     if @user.save
       session[:user_id] = @user.id
@@ -18,7 +22,7 @@ class UsersController < ApplicationController
   end
 
   private
-  def set_user
+  def user_params
     params.require(:user).permit(:name, :password, :passford_confirmation)
   end
 end
