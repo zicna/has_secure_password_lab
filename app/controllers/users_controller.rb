@@ -6,13 +6,14 @@ class UsersController < ApplicationController
   def create
     @user = User.create(set_user)
 
-    if @user.save
-      session[:user_id] = @user.id
-      redirect_to controller: 'welcome', action: 'home'
+    if !@user.save
+      redirect_to(controller: 'users', action: 'new')
 
     else
+      session[:user_id] = @user.id
+      redirect_to controller: 'welcome', action: 'home'
       #  redirect_to new_user_path
-       redirect_to(controller: 'users', action: 'new')
+       
 
     end
 
